@@ -1,4 +1,6 @@
-package org.javaee7.cdi;
+package org.javaee7.cdi.annotations;
+
+import org.javaee7.cdi.Digit;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
@@ -10,5 +12,7 @@ import static java.lang.annotation.ElementType.*;
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE,FIELD,METHOD})
-public @interface EightDigits {
+public @interface NumberOfDigits {
+	Digit value();
+	boolean odd();
 }

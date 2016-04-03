@@ -1,4 +1,4 @@
-package org.javaee7.cdi;
+package org.javaee7.cdi.producers;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;

@@ -1,4 +1,4 @@
-package org.javaee7.cdi;
+package org.javaee7.cdi.annotations;
 
 import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.Retention;

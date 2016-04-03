@@ -1,5 +1,7 @@
 package org.javaee7.cdi;
 
+import org.javaee7.cdi.annotations.Loggable;
+
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
