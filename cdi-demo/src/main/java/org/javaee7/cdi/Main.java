@@ -11,10 +11,10 @@ public class Main {
 		//createBook(weldContainer);
 
 		//---- Count lines in a file
-		//countLinesFromFile(weldContainer);
+		countLinesFromFile(weldContainer);
 
 		//---- Demonstrate conversation scope context usage
-		exerciseConversation(weldContainer);
+		//exerciseConversation(weldContainer);
 		// ---- Tear down CDI infrastructure
 		weld.shutdown();
 	}
@@ -27,7 +27,7 @@ public class Main {
 
 	private static void countLinesFromFile(WeldContainer weldContainer) {
 		final FileService fileService = weldContainer.instance().select(FileService.class).get();
-		System.out.println(fileService.countLines());
+		fileService.countLines();
 	}
 
 	private static void exerciseConversation(WeldContainer weldContainer) {

@@ -4,8 +4,12 @@
                            http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
        version="1.1" bean-discovery-mode="all">
 
+    <!--Enable interceptors-->
+    <interceptors>
+        <class>org.javaee7.cdi.interceptors.LoggingInterceptor</class>
+    </interceptors>
     <alternatives>
         <class>org.javaee7.cdi.alternatives.MockNumberGenerator</class>
-        <class>org.javaee7.cdi.alternatives.MockFileProducer</class>
+        <!-- <class>org.javaee7.cdi.alternatives.MockFileProducer</class> -->
     </alternatives>
 </beans>

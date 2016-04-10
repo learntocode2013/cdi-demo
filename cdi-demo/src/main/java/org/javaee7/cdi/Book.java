@@ -1,5 +1,10 @@
 package org.javaee7.cdi;
 
+import org.javaee7.cdi.interceptors.LoggingInterceptor;
+
+import javax.interceptor.Interceptors;
+
+@Interceptors(LoggingInterceptor.class)
 public class Book {
 	private String title;
 	private String description;

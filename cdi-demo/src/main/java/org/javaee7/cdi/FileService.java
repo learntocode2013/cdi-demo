@@ -1,5 +1,6 @@
 package org.javaee7.cdi;
 
+import org.javaee7.cdi.annotations.Loggable;
 import org.javaee7.cdi.annotations.Readable;
 
 import javax.inject.Inject;
@@ -8,11 +9,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+@Loggable
 public class FileService {
 	@Inject
 	private Logger logger;
 
-	@Inject @Readable(src = "/Users/disen/Desktop/Docs/bank-details.txt")
+	@Inject @Readable(src = "/Users/disen/Desktop/Docs/grinder.log")
 	private FileReader fileReader;
 
 	public int countLines() {

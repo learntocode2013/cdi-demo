@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
+/* TODO: Find out how to create a Conversation Context */
+
 @ConversationScoped
 public class CustomerCreatorWizard implements Serializable {
 	private Account customerAccount  ;
