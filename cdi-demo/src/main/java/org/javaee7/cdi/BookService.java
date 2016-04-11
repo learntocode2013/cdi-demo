@@ -7,7 +7,9 @@ import javax.inject.Inject;
 
 @Loggable
 public class BookService {
-	@Inject @NumberOfDigits(value = Digit.THIRTEEN_DIGITS, odd = true)
+	//----- If any decorator is present, it will be invoked
+	@Inject
+	@NumberOfDigits(value = Digit.EIGHT_DIGITS, odd = false)
 	private NumberGenerator numberGenerator;
 
 

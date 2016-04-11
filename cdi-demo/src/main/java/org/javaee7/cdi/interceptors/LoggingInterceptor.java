@@ -2,6 +2,7 @@ package org.javaee7.cdi.interceptors;
 
 import org.javaee7.cdi.annotations.Loggable;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundConstruct;
 import javax.interceptor.AroundInvoke;
@@ -10,8 +11,11 @@ import javax.interceptor.InvocationContext;
 import java.time.LocalTime;
 import java.util.logging.Logger;
 
+import static javax.interceptor.Interceptor.Priority.*;
+
 @Loggable
 @Interceptor
+@Priority(LIBRARY_BEFORE + 10)
 public class LoggingInterceptor {
 	@Inject
 	private Logger logger;

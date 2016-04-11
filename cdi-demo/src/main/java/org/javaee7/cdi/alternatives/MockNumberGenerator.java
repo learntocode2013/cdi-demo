@@ -6,7 +6,8 @@ import org.javaee7.cdi.annotations.NumberOfDigits;
 
 import javax.enterprise.inject.Alternative;
 
-@Alternative @NumberOfDigits(value = Digit.THIRTEEN_DIGITS, odd = true)
+@Alternative
+@NumberOfDigits(value = Digit.EIGHT_DIGITS, odd = false)
 public class MockNumberGenerator implements NumberGenerator{
 	@Override
 	public String generate() {

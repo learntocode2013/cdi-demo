@@ -1,5 +1,6 @@
 package org.javaee7.cdi;
 
+import org.javaee7.cdi.decorators.FromEightToThirteen;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
@@ -8,15 +9,23 @@ public class Main {
 		Weld weld = new Weld();
 		final WeldContainer weldContainer = weld.initialize();
 		//----- Create a book from BookService
-		//createBook(weldContainer);
+		//useNumberDecorator(weldContainer);
+		createBook(weldContainer);
 
 		//---- Count lines in a file
-		countLinesFromFile(weldContainer);
+		//countLinesFromFile(weldContainer);
 
 		//---- Demonstrate conversation scope context usage
 		//exerciseConversation(weldContainer);
 		// ---- Tear down CDI infrastructure
 		weld.shutdown();
+	}
+
+	private static void useNumberDecorator(WeldContainer weldContainer) {
+		final FromEightToThirteen fromEightToThirteen = weldContainer.instance()
+				.select(FromEightToThirteen.class)
+				.get();
+		fromEightToThirteen.generate();
 	}
 
 	private static void createBook(WeldContainer weldContainer) {

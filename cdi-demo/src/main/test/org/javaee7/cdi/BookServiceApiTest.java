@@ -6,7 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class BookServiceApiTest {
 	private static Weld cdi_handle;
@@ -23,11 +24,9 @@ public class BookServiceApiTest {
 
 	@Test
 	public void bookCreatedWithMockNumber() {
-		cdi_handle.addAlternative(org.javaee7.cdi.alternatives.MockNumberGenerator.class);
-
 		final WeldContainer weldContainer = cdi_handle.initialize();
 		final BookService bookService = weldContainer.instance().select(BookService.class).get();
 		final Book book = bookService.create("Mastering Lambdas", "java-8 api(s)", 32.6f);
-		assertTrue("Expected book number MOCK | Got: " + book.getNumber(),book.getNumber().equals("MOCK"));
+		assertThat(book.getNumber(), is(equals("MOCK")));
 	}
 }
