@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 public class BookServiceApiTest {
 	private static Weld cdi_handle;
@@ -27,6 +27,6 @@ public class BookServiceApiTest {
 		final WeldContainer weldContainer = cdi_handle.initialize();
 		final BookService bookService = weldContainer.instance().select(BookService.class).get();
 		final Book book = bookService.create("Mastering Lambdas", "java-8 api(s)", 32.6f);
-		assertThat(book.getNumber(), is(equals("MOCK")));
+		assertThat(book.getNumber(), equalTo("MOCK"));
 	}
 }

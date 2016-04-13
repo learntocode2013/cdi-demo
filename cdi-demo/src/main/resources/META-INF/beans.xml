@@ -10,12 +10,11 @@
     </interceptors>
     <!-- Enable decorators -->
     <decorators>
-        <class>org.javaee7.cdi.decorators.FromEightToThirteen</class>
+        <!-- <class>org.javaee7.cdi.decorators.FromEightToThirteen</class>-->
         <class>org.javaee7.cdi.alternatives.MockEightToThirteen</class>
     </decorators>
     <alternatives>
         <class>org.javaee7.cdi.alternatives.MockNumberGenerator</class>
         <class>org.javaee7.cdi.alternatives.MockFileProducer</class>
-        <class>org.javaee7.cdi.alternatives.MockEightToThirteen</class>
     </alternatives>
 </beans>
