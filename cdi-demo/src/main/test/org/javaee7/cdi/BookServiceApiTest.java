@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class BookServiceApiTest {
 	private static Weld cdi_handle;
@@ -25,8 +26,23 @@ public class BookServiceApiTest {
 	@Test
 	public void bookCreatedWithMockNumber() {
 		final WeldContainer weldContainer = cdi_handle.initialize();
-		final BookService bookService = weldContainer.instance().select(BookService.class).get();
+		final BookService bookService = weldContainer.instance()
+				.select(BookService.class)
+				.get();
 		final Book book = bookService.create("Mastering Lambdas", "java-8 api(s)", 32.6f);
 		assertThat(book.getNumber(), equalTo("MOCK"));
+	}
+
+	@Test
+	public void booksCanBeAddedAndRemoved() {
+		final WeldContainer weldContainer = cdi_handle.initialize();
+		final BookService bookService = weldContainer.instance()
+				.select(BookService.class)
+				.get();
+		final InventoryService inventoryService = weldContainer.instance()
+				.select(InventoryService.class)
+				.get();
+		final Book book = bookService.create("Mastering Lambdas", "java-8 api(s)", 32.6f);
+		assertThat(inventoryService.fetchAllBooks(),hasItem(book));
 	}
 }

@@ -29,9 +29,14 @@ public class Main {
 	}
 
 	private static void createBook(WeldContainer weldContainer) {
-		final BookService bookService = weldContainer.instance().select(BookService.class).get();
+		final BookService bookService = weldContainer.instance()
+				.select(BookService.class)
+				.get();
+
 		final Book book = bookService.create("Beginning-JavaEE-7", "Best book by Antonio Goncalves", 20.34f);
 		System.out.println(book);
+		//System.out.println(inventoryService.fetchAllBooks());
+		bookService.remove(book);
 	}
 
 	private static void countLinesFromFile(WeldContainer weldContainer) {
