@@ -4,6 +4,7 @@ import org.javaee7.cdi.annotations.Added;
 import org.javaee7.cdi.annotations.Loggable;
 import org.javaee7.cdi.annotations.Removed;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Loggable
+@ApplicationScoped
 public class InventoryService {
 	@Inject
 	private Logger logger ;
