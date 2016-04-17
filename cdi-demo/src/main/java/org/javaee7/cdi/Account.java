@@ -1,4 +1,4 @@
-package org.javaee7.cdi.producers;
+package org.javaee7.cdi;
 
 public class Account {
 	private String _firstName ;

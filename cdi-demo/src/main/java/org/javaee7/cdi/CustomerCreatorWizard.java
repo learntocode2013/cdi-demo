@@ -1,7 +1,5 @@
 package org.javaee7.cdi;
 
-import org.javaee7.cdi.producers.Account;
-
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;

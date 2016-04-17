@@ -1,7 +1,5 @@
 package org.javaee7.cdi;
 
-import org.javaee7.cdi.producers.Account;
-
 public class Customer {
 	private final Login _credentials ;
 	private final Account _details ;

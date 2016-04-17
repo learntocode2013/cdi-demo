@@ -4,6 +4,8 @@ import org.javaee7.cdi.decorators.FromEightToThirteen;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
+import java.util.Optional;
+
 public class Main {
 	public static void main(String[] args) {
 		Weld weld = new Weld();
@@ -33,10 +35,11 @@ public class Main {
 				.select(BookService.class)
 				.get();
 
-		final Book book = bookService.create("Beginning-JavaEE-7", "Best book by Antonio Goncalves", 20.34f);
-		System.out.println(book);
+		final Optional<Book> bookOptional = bookService
+				.create("Beginning-JavaEE-7", "Best book by Antonio Goncalves", 20.34f);
+		System.out.println(bookOptional.get());
 		//System.out.println(inventoryService.fetchAllBooks());
-		bookService.remove(book);
+		bookService.remove(bookOptional.get());
 	}
 
 	private static void countLinesFromFile(WeldContainer weldContainer) {

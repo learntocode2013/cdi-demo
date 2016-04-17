@@ -3,12 +3,20 @@ package org.javaee7.cdi;
 import org.javaee7.cdi.interceptors.LoggingInterceptor;
 
 import javax.interceptor.Interceptors;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Interceptors(LoggingInterceptor.class)
 public class Book {
+	@NotNull
+	@Size(min=1, max=20)
 	private String title;
+	@Size(min = 8, max = 200)
 	private String description;
+	@NotNull
 	private String number;
+	@NotNull @Min(5)
 	private Float price;
 
 	public Book(String description, String number, Float price, String title) {
@@ -67,6 +75,7 @@ public class Book {
 
 	}
 
+	/*
 	@Override
 	public int hashCode() {
 		int result = title.hashCode();
@@ -74,7 +83,7 @@ public class Book {
 		result = 31 * result + number.hashCode();
 		result = 31 * result + price.hashCode();
 		return result;
-	}
+	}*/
 
 	@Override
 	public String toString() {

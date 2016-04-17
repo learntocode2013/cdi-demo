@@ -15,6 +15,13 @@
   </properties>
 
   <dependencies>
+    <!-- Bean validation dependency config -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>5.2.4.Final</version>
+    </dependency>
+    <!-- CDI dependency config -->
     <dependency>
       <groupId>org.jboss.weld.se</groupId>
       <artifactId>weld-se</artifactId>
