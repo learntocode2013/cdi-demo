@@ -1,9 +1,13 @@
 package org.javaee7.cdi;
 
+import org.javaee7.cdi.constraints.Email;
+
 public class Account {
 	private String _firstName ;
 	private String _lastName ;
 	private String _contactNumber ;
+
+	@Email
 	private final String _email ;
 
 	public Account(String _email) {
@@ -62,8 +66,8 @@ public class Account {
 	public int hashCode() {
 		int result = _firstName != null ? _firstName.hashCode() : 0;
 		result = 31 * result + (_lastName != null ? _lastName.hashCode() : 0);
-		result = 31 * result + _contactNumber.hashCode();
-		result = 31 * result + _email.hashCode();
+		result = 31 * result + (_contactNumber != null ? _contactNumber.hashCode() : 0);
+		result = 31 * result + (_email !=null ? _email.hashCode() : 0);
 		return result;
 	}
 }

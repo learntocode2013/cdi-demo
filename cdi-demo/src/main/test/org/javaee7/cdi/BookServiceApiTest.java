@@ -48,7 +48,7 @@ public class BookServiceApiTest {
 				.select(BookService.class)
 				.get();
 		final Optional<Book> bookOptional = bookService
-				.create("Mastering Lambdas", "Explore java ee 7 features", 1.0f);
+				.create(null, "Explore java ee 7 features", 1.0f);
 		assertThat(bookOptional.isPresent(),is(false));
 	}
 

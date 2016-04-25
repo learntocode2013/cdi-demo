@@ -9,14 +9,14 @@ import javax.validation.constraints.Size;
 
 @Interceptors(LoggingInterceptor.class)
 public class Book {
-	@NotNull
-	@Size(min=1, max=20)
+	@NotNull(message = "Book must have a title")
+	@Size(min=1, max=20, message = "Book title length must be between 1-20 characters")
 	private String title;
 	@Size(min = 8, max = 200)
 	private String description;
-	@NotNull
+	@NotNull(message = "Book must contain an identification number")
 	private String number;
-	@NotNull @Min(5)
+	@NotNull @Min(value = 5, message = "Book price must be atleast 5 dollars or more")
 	private Float price;
 
 	public Book(String description, String number, Float price, String title) {

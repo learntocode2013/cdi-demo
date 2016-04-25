@@ -7,9 +7,7 @@ public class CustomerService {
 	@Inject
 	private Logger logger ;
 
-	public void create(Customer customer) {
-		logger.info("----- Created a new customer with login name: " + customer
-				.get_credentials()
-				.get_name());
+	public boolean create(Customer customer) {
+		return false;
 	}
 }

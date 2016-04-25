@@ -43,7 +43,7 @@ public class InventoryService {
 			@Observes
 			@Violated
 					Set<ConstraintViolation<Book>> violations) {
-		String msg = "#----- Book attribute: " ;
+		String msg = "#----- " ;
 		for (ConstraintViolation<Book> each : violations ) {
 			logger.warning(msg + each.getMessage());
 		}
