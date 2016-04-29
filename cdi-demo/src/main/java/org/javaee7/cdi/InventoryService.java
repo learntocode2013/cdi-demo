@@ -20,6 +20,7 @@ public class InventoryService {
 	@Inject
 	private Logger logger ;
 	private final List<Book> books = new ArrayList<>();
+	private final List<CreditCard> cards = new ArrayList<>();
 
 	public void addBook(@Observes @Added Book newBook) {
 		if( books.add(newBook) ) {
@@ -39,6 +40,8 @@ public class InventoryService {
 		return books ;
 	}
 
+	public List<CreditCard> fetchAllCards() { return cards ; }
+
 	public void takeActionForViolations(
 			@Observes
 			@Violated
@@ -46,6 +49,14 @@ public class InventoryService {
 		String msg = "#----- " ;
 		for (ConstraintViolation<Book> each : violations ) {
 			logger.warning(msg + each.getMessage());
+		}
+	}
+
+	public void addCreditCard(@Observes @Added CreditCard newCard) {
+		if( cards.add(newCard) ) {
+			logger.info(String
+					.format("#--- Credit card %s was added to the inventory",
+							newCard.getNumber()));
 		}
 	}
 }

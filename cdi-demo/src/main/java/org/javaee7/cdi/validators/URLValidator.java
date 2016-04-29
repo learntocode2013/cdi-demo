@@ -1,4 +1,4 @@
-package validators;
+package org.javaee7.cdi.validators;
 
 import org.javaee7.cdi.constraints.URL;
 
@@ -6,7 +6,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.net.MalformedURLException;
 
+//TODO: Inject logger instances from CDI container
 public class URLValidator implements ConstraintValidator<URL,String>{
+	//------ Expected values
 	private String proto    ;
 	private String host     ;
 	private int    port     ;

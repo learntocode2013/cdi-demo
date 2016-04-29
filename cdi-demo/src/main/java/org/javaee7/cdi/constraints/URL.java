@@ -1,6 +1,6 @@
 package org.javaee7.cdi.constraints;
 
-import validators.URLValidator;
+import org.javaee7.cdi.validators.URLValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

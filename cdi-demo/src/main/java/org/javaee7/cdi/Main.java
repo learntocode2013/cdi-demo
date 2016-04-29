@@ -12,13 +12,16 @@ public class Main {
 		final WeldContainer weldContainer = weld.initialize();
 		//----- Create a book from BookService
 		//useNumberDecorator(weldContainer);
-		createBook(weldContainer);
+		//createBook(weldContainer);
 
 		//---- Count lines in a file
 		//countLinesFromFile(weldContainer);
 
 		//---- Demonstrate conversation scope context usage
 		//exerciseConversation(weldContainer);
+
+		//--- Demonstrate method parameter validation
+		exerciseParamValidation(weldContainer);
 		// ---- Tear down CDI infrastructure
 		weld.shutdown();
 	}
@@ -55,5 +58,13 @@ public class Main {
 				.saveLogin("john_doe","password123")
 				.saveAccount("John","Doe","johndoe@msdn.com")
 				.createCustomer();
+	}
+
+//--- Method which demonstrates how validation can be trigerred via interceptors
+	private static void exerciseParamValidation(WeldContainer weldContainer) {
+		final CardValidator cardValidator = weldContainer.instance()
+				.select(CardValidator.class)
+				.get();
+		cardValidator.validate(null);
 	}
 }
