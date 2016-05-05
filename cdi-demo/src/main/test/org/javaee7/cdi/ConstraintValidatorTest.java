@@ -8,8 +8,10 @@ import org.junit.runners.MethodSorters;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.groups.Default;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,7 @@ public class ConstraintValidatorTest {
 	private Order                _customerOrder    ;
 	private CardValidator       _cardValidator     ;
 	private static InventoryService    _inventory  ;
+	private static Properties   _constraintMessages;
 
 	@BeforeClass
 	public static void beforeAllTests() {
@@ -31,6 +34,18 @@ public class ConstraintValidatorTest {
 		_validator = Validation
 				.buildDefaultValidatorFactory()
 				.getValidator() ;
+		_constraintMessages = new Properties();
+		_constraintMessages
+				.put("org.javaee7.cdi.constraints.Email.message",
+						"Specified Email address is not valid");
+		_constraintMessages
+				.put("org.javaee7.cdi.constraints.URL.message",
+						"Specified URL is malformed");
+		_constraintMessages
+				.put("org.javaee7.cdi.constraints.ChronologicalDates.message",
+						"Order creation date " + System.lineSeparator() +
+						"  must occur before order payment date which must " +
+								"occur before order delivery date");
 		_inventory = _cdiContainer
 				.select(InventoryService.class)
 				.get();
@@ -56,6 +71,21 @@ public class ConstraintValidatorTest {
 	}
 
 	@Test
+	public void serverURLMustBeOfMinimumLength() {
+		_serverConnection.setItemUrl("http://a.c");
+		final Set<ConstraintViolation<ItemServerConnection>> constraintViolations =
+				_validator.validate(_serverConnection);
+		assertThat(constraintViolations.isEmpty(),is(equalTo(false))) ;
+		final String violationMsg = constraintViolations.stream()
+				.map(violation -> violation.getMessage())
+				.findFirst()
+				.get();
+		assertThat(violationMsg,anyOf(containsString(_constraintMessages
+				.getProperty("org.javaee7.cdi.constraints.URL.message")),
+				containsString("URL must be atleast 16 characters long")));
+	}
+
+	@Test
 	public void serverURLCannotBeInsecure() {
 		_serverConnection.setItemUrl("http://www.cisco.com/v1/item");
 		final Set<ConstraintViolation<ItemServerConnection>> constraintViolations = _validator
@@ -66,7 +96,8 @@ public class ConstraintValidatorTest {
 				.findFirst()
 				.get();
 
-		assertThat(violationMsg,containsString("malformed URL"));
+		assertThat(violationMsg,containsString(_constraintMessages
+				.getProperty("org.javaee7.cdi.constraints.URL.message")));
 	}
 
 	@Test
@@ -80,7 +111,10 @@ public class ConstraintValidatorTest {
 				.findFirst()
 				.orElse("No-value");
 
-		assertThat(violationMsg,containsString("malformed URL"));
+		assertThat(violationMsg,anyOf(containsString(_constraintMessages
+				.getProperty("org.javaee7.cdi.constraints.URL.message")),
+				containsString("URI port must always be 21")
+		));
 	}
 
 	@Test
@@ -91,7 +125,8 @@ public class ConstraintValidatorTest {
 				"AMZ-2016-04-25-A01",
 				LocalDate.now(),2456.83
 				);
-		final Set<ConstraintViolation<Order>> constraintViolations = _validator.validate(_customerOrder);
+		final Set<ConstraintViolation<Order>> constraintViolations = _validator
+				.validate(_customerOrder, Default.class);
 		final List<String> messages = constraintViolations.stream()
 				.map(violation -> violation.getMessage())
 				.collect(Collectors.toList());
@@ -109,9 +144,11 @@ public class ConstraintValidatorTest {
 		final Set<ConstraintViolation<Order>> constraintViolations = _validator.validate(_customerOrder);
 		final List<String> messages = constraintViolations.stream()
 				.map(violation -> violation.getMessage())
+				.peek(message -> System.out.println(message))
 				.collect(Collectors.toList());
 		assertThat(messages.isEmpty(),is(equalTo(false)));
-		assertThat(messages.get(0),containsString("must occur before"));
+		assertThat(messages.size(),is(equalTo(3)));
+		assertThat(messages,hasItem(containsString("must occur before")));
 	}
 
 	@Test
@@ -120,7 +157,7 @@ public class ConstraintValidatorTest {
 				.now().plusYears(10));
 		_cardValidator = _cdiContainer.select(CardValidator.class).get();
 		_cardValidator.validate(card);
-		assertThat(_inventory.fetchAllCards(),hasItem(card));
+		//assertThat(_inventory.fetchAllCards(),hasItem(card));
 	}
 
 	@Test
@@ -129,5 +166,11 @@ public class ConstraintValidatorTest {
 		//--- Validate first and then allow method invocation
 		_cardValidator = _cdiContainer.select(CardValidator.class).get();
 		_cardValidator.validate(card);
+	}
+
+	@Test
+	public void cannotCreateAccountWithInvalidDetails() {
+		Account account = _cdiContainer.select(Account.class).get();
+		account.set_contactNumber("990");
 	}
 }

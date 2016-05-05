@@ -13,9 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Constraint(validatedBy = {ChronoLogicalDateValidator.class})
 public @interface ChronologicalDates {
-	String message() default "Order creation date must occur before" +
-			" order payment date which must occur before" +
-			" order delivery date" ;
+	String message() default "{org.javaee7.cdi.constraints.ChronologicalDates.message}" ;
 	Class<?>[] groups() default {} ;
 	Class<? extends Payload>[] payload() default {} ;
 }

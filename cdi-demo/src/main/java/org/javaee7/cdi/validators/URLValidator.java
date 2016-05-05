@@ -33,8 +33,24 @@ public class URLValidator implements ConstraintValidator<URL,String>{
 		}
 
 		if( null != proto && !proto.equals(url.getProtocol())) return false ;
-		if( null != host  && 0 != host.trim().length() && !host.equals(url.getHost())) return false ;
-		if( port != url.getPort() ) return false ;
+
+		//--- Customize violation message for host
+		if( null != host  && 0 != host.trim().length() && !host.equals(url.getHost())) {
+			constraintValidatorContext.disableDefaultConstraintViolation();
+			constraintValidatorContext
+					.buildConstraintViolationWithTemplate("Target host must always be " + host)
+					.addConstraintViolation();
+			return false ;
+		}
+
+		//--- Customize violation message for port
+		if( port != url.getPort() ) {
+			constraintValidatorContext.disableDefaultConstraintViolation();
+			constraintValidatorContext
+					.buildConstraintViolationWithTemplate("URI port must always be " + port)
+					.addConstraintViolation();
+			return false ;
+		}
 
 		return true;
 	}

@@ -1,0 +1,27 @@
+<constraint-mappings xmlns="http://jboss.org/xml/ns/javax/validation/mapping">
+    <default-package>org.javaee7.cdi</default-package>
+    <bean class="Book" ignore-annotations="false">
+        <field name="title">
+            <constraint annotation="javax.validation.constraints.NotNull">
+                <message>Every book must have a title</message>
+            </constraint>
+        </field>
+    </bean>
+
+    <bean class="Order" ignore-annotations="false">
+        <field name="creationDate">
+            <constraint annotation="javax.validation.constraints.NotNull">
+                <message>Every purchase order must have a creation date</message>
+            </constraint>
+            <constraint annotation="javax.validation.constraints.Past">
+                <message>Order creation date must be older than current date</message>
+            </constraint>
+        </field>
+    </bean>
+
+    <constraint-definition annotation="javax.validation.constraints.Past">
+        <validated-by include-existing-validators="false">
+            <value>org.javaee7.cdi.validators.PastDateValidator</value>
+        </validated-by>
+    </constraint-definition>
+</constraint-mappings>

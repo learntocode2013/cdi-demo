@@ -1,9 +1,14 @@
 package org.javaee7.cdi.interceptors;
 
+import org.javaee7.cdi.CreditCard;
+import org.javaee7.cdi.Order;
+import org.javaee7.cdi.annotations.Added;
 import org.javaee7.cdi.annotations.Sanitize;
 
 import javax.annotation.Priority;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.interceptor.AroundConstruct;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -24,6 +29,30 @@ public class ValidationInterceptor {
 	@Inject
 	private Validator _validator ;
 
+	@Inject
+	@Added
+	private Event<Order> orderAdded ;
+
+	@Inject
+	@Added
+	private Event<CreditCard> cardAddedEvent ;
+
+	@AroundConstruct
+	public void allowInstantiation(InvocationContext ic) {
+		try {
+			ic.proceed();
+			final Set<ConstraintViolation<Object>> constraintViolations
+					= _validator.validate(ic.getTarget());
+			if( constraintViolations.isEmpty() ) {
+				if( ic.getTarget() instanceof Order ) {
+					orderAdded.fire((Order)ic.getTarget());
+				}
+			}
+		} catch (Exception cause) {
+			cause.printStackTrace();
+		}
+	}
+
 	@AroundInvoke
 	public Object allowMethodInvocationForValidParams(InvocationContext ic) {
 		final Object targetClass = ic.getTarget();
@@ -37,7 +66,10 @@ public class ValidationInterceptor {
 				.validateParameters(targetClass, targetMethod, parameters);
 		if( constraintViolations.isEmpty() ) {
 			try {
-				return ic.proceed();
+				ic.proceed();
+				if( ic.getTarget() instanceof CreditCard ) {
+					cardAddedEvent.fire((CreditCard) ic.getTarget());
+				}
 			} catch (Exception cause) {
 				cause.printStackTrace();
 			} finally {

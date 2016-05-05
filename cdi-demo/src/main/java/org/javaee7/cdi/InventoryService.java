@@ -21,6 +21,7 @@ public class InventoryService {
 	private Logger logger ;
 	private final List<Book> books = new ArrayList<>();
 	private final List<CreditCard> cards = new ArrayList<>();
+	private final List<Order> orders = new ArrayList<>();
 
 	public void addBook(@Observes @Added Book newBook) {
 		if( books.add(newBook) ) {
@@ -42,6 +43,8 @@ public class InventoryService {
 
 	public List<CreditCard> fetchAllCards() { return cards ; }
 
+	public List<Order> fetchAllOrder() { return orders ; }
+
 	public void takeActionForViolations(
 			@Observes
 			@Violated
@@ -57,6 +60,14 @@ public class InventoryService {
 			logger.info(String
 					.format("#--- Credit card %s was added to the inventory",
 							newCard.getNumber()));
+		}
+	}
+
+	public void addOrder(@Observes @Added Order newOrder) {
+		if( orders.add(newOrder) ) {
+			logger.info(String
+					.format("--- Inventory was updated for Order %s",newOrder
+							.getOrderId()));
 		}
 	}
 }

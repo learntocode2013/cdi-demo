@@ -1,14 +1,30 @@
 package org.javaee7.cdi;
 
+import org.javaee7.cdi.annotations.Sanitize;
 import org.javaee7.cdi.constraints.Email;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Account {
 	private String _firstName ;
 	private String _lastName ;
 	private String _contactNumber ;
 
-	@Email
-	private final String _email ;
+	@Sanitize
+	public void set_email(String _email) {
+		this._email = _email;
+	}
+
+	public String get_email() {
+		return _email;
+	}
+
+	@Email(message = "Login email was not valid")
+	private String _email ;
+
+	public Account() {
+	}
 
 	public Account(String _email) {
 		this._email = _email;
@@ -18,7 +34,10 @@ public class Account {
 		return _contactNumber;
 	}
 
-	public void set_contactNumber(String _contactNumber) {
+	@Sanitize
+	public void set_contactNumber(@NotNull
+	                              @Size(min=10)
+			                      String _contactNumber) {
 		this._contactNumber = _contactNumber;
 	}
 

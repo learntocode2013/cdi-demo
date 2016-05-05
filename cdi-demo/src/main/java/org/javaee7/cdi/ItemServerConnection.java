@@ -3,7 +3,7 @@ package org.javaee7.cdi;
 import org.javaee7.cdi.constraints.URL;
 
 public class ItemServerConnection {
-	@URL(protocol = "https", host = "www.cisco.com")
+	@URL(host = "www.cisco.com",protocol = "https")
 	private String itemUrl ;
 
 	public void setFtpServer(String ftpServer) {
