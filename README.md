@@ -8,3 +8,7 @@ This project is more of a "forcing function" undertaking and does not contain co
 
 #-- Icing on the cake
 If the code samples here are found to be helpful to someone... coolness.
+
+
+[N.B.]
+A forcing function is any task, activity or event that forces you to take action and produce a result.
