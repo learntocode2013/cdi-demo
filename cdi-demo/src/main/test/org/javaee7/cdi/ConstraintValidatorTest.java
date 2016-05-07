@@ -1,5 +1,7 @@
 package org.javaee7.cdi;
 
+import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
+import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.*;
@@ -8,6 +10,7 @@ import org.junit.runners.MethodSorters;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConstraintValidatorTest {
 	private static WeldContainer _cdiContainer     ;
+	private static ValidatorFactory _valFactory    ;
 	private static Validator     _validator        ;
 	private ItemServerConnection _serverConnection ;
 	private Order                _customerOrder    ;
@@ -31,8 +35,16 @@ public class ConstraintValidatorTest {
 	@BeforeClass
 	public static void beforeAllTests() {
 		_cdiContainer = new Weld().initialize();
-		_validator = Validation
-				.buildDefaultValidatorFactory()
+		//--- Specify the resource bundle to use for messages
+		_valFactory   = Validation.byDefaultProvider()
+				.configure()
+				.messageInterpolator(
+						new ResourceBundleMessageInterpolator(
+								new PlatformResourceBundleLocator("ValidationMessages")
+							)
+				)
+				.buildValidatorFactory();
+		_validator = _valFactory
 				.getValidator() ;
 		_constraintMessages = new Properties();
 		_constraintMessages
@@ -40,7 +52,7 @@ public class ConstraintValidatorTest {
 						"Specified Email address is not valid");
 		_constraintMessages
 				.put("org.javaee7.cdi.constraints.URL.message",
-						"Specified URL is malformed");
+						"is malformed");
 		_constraintMessages
 				.put("org.javaee7.cdi.constraints.ChronologicalDates.message",
 						"Order creation date " + System.lineSeparator() +
@@ -64,7 +76,7 @@ public class ConstraintValidatorTest {
 
 	@AfterClass
 	public static void afterAllTests() {
-		//_validator = null ;
+		_valFactory.close();
 		if( _cdiContainer.isRunning() ) {
 			_cdiContainer.shutdown();
 		}
@@ -142,13 +154,20 @@ public class ConstraintValidatorTest {
 				LocalDate.now(),2456.83
 		);
 		final Set<ConstraintViolation<Order>> constraintViolations = _validator.validate(_customerOrder);
-		final List<String> messages = constraintViolations.stream()
+		final List<String> messages = constraintViolations
+				.stream()
+				.peek(violation -> System.out.println(violation.getMessage()
+						+ " | culprit: "
+						+ violation.getPropertyPath()
+						+ " "
+						+ violation.getInvalidValue()
+				))
+
 				.map(violation -> violation.getMessage())
-				.peek(message -> System.out.println(message))
 				.collect(Collectors.toList());
 		assertThat(messages.isEmpty(),is(equalTo(false)));
 		assertThat(messages.size(),is(equalTo(3)));
-		assertThat(messages,hasItem(containsString("must occur before")));
+		assertThat(messages,hasItem(containsString("must be in the past")));
 	}
 
 	@Test
